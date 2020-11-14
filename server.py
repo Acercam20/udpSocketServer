@@ -16,6 +16,7 @@ def connectionLoop(sock):
     while True:
         data, addr = sock.recvfrom(1024)
         data = str(data)
+        data = data[2:-1]
         print("Data Recieved: " + data) #Drop
         
         if addr in clients:
