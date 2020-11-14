@@ -21,6 +21,9 @@ def connectionLoop(sock):
         if addr in clients:
             if 'heartbeat' in data:
                 clients[addr]['lastBeat'] = datetime.now()
+            else:
+                playerInfo = json.loads(data)
+                clients[addr]['position'] = playerInfo['position']
         else:
             if 'connect' in data:
                 clients[addr] = {}
