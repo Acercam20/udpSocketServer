@@ -45,21 +45,19 @@ def connectionLoop(sock):
                 
 def cleanClients(sock):
     while True:
-        isClean = False
-        message = {"cmd": 3,"player":[]}
         for c in list(clients.keys()):
             if (datetime.now() - clients[c]['lastBeat']).total_seconds() > 5:
                 print('Dropped Client: ', c)
+                
+                for cl in list(clients.keys()):
+                    dmessage = {"cmd": 2, "id":str(c)}
+                    m = json.dumps(dmessage)
+                    sock.sendto(bytes(m,'utf8'), (cl[0],cl[1]))
+                
                 clients_lock.acquire()
                 del clients[c]
                 clients_lock.release()
-                message['player'].append({"id":str(c)})
-                isClean = True
-        #message = {"cmd": 2, "droppedPlayers": droppedClients}
-        m = json.dumps(message)
-        if isClean:
-            for c in clients:
-                sock.sendto(bytes(m, 'utf8'), (c[0], c[1]))
+        #m = json.dumps(message)
         time.sleep(1)
 
 
