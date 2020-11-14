@@ -31,27 +31,17 @@ def connectionLoop(sock):
                 clients[addr]['lastBeat'] = datetime.now()
                 clients[addr]['color'] = 0
                 clients[addr]['position'] = {}
-                message = {"cmd": 0, "players": []}  # {"id":addr}}
-
-                p = {}
-                p['id'] = str(addr)
-                p['color'] = 0
-                message['players'].append(p)
-                GameState = {"cmd": 4, "players": []}
-                for c in clients:
-                    if (c == addr):
-                        message['cmd'] = 3
-                    else:
-                        message['cmd'] = 0
-                    m = json.dumps(message)
-                    player = {}
-                    player['id'] = str(c)
-                    GameState['players'].append(player)
-                    sock.sendto(bytes(m, 'utf8'), (c[0], c[1]))
-                m = json.dumps(GameState)
-                sock.sendto(bytes(m, 'utf8'), addr)
-
-
+                message = {"cmd": 0,"player":{"id":str(addr)}}
+                m = json.dumps(message)
+                sock.sendto(bytes(m,'utf8'), (c[0],c[1]))
+                
+                player = {}
+                player['id'] = str(c)
+                PlayersInGameList['players'].append(player)
+                
+                sock.sendto(bytes(json.dumps(PlayersInGameList), 'utf8'), (addr[0],addr[1]))
+                
+                
 def cleanClients(sock):
     while True:
         isClean = False
@@ -90,7 +80,7 @@ def gameLoop(sock):
         for c in clients:
             sock.sendto(bytes(s, 'utf8'), (c[0], c[1]))
         clients_lock.release()
-        time.sleep(1/10)
+        time.sleep(3/10)
 
 def main():
     port = 12345
