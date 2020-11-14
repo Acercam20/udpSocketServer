@@ -73,7 +73,6 @@ def gameLoop(sock):
 
     pktID = 0 
     while True:
-        print("Boop")
         GameState = {"cmd": 1, "pktID": pktID, "players": []}
         clients_lock.acquire()
         for c in clients:
