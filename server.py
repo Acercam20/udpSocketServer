@@ -58,9 +58,9 @@ def cleanClients(sock):
                 clients_lock.acquire()
                 del clients[c]
                 clients_lock.release()
-                droppedClients.append({"id":str(c)})
+                message['player'].append({"id":str(c)})
                 isClean = True
-        message = {"cmd": 2, "droppedPlayers": droppedClients}
+        #message = {"cmd": 2, "droppedPlayers": droppedClients}
         m = json.dumps(message)
         if isClean:
             for c in clients:
