@@ -17,7 +17,7 @@ def connectionLoop(sock):
         data, addr = sock.recvfrom(1024)
         data = str(data)
         data = data[2:-1]
-        print("Data Recieved: " + data) #Drop
+        print("Data Recieved: " + data)
         
         PlayersInGameList = {"cmd": 3, "players": []} 
         if addr in clients:
@@ -66,6 +66,7 @@ def gameLoop(sock):
 
     pktID = 0 
     while True:
+        print("Boop")
         GameState = {"cmd": 1, "pktID": pktID, "players": []}
         clients_lock.acquire()
         for c in clients:
